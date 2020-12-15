@@ -15,13 +15,14 @@ namespace AppWcfService
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        SqlConnection con = new SqlConnection("Data Source = DESKTOP-MJR06SE; Initial Catalog= TestDB; MultipleActiveResultSets=True; User ID =sa; Password= marsa010300");
+        SqlConnection con = new SqlConnection("Data Source=DESKTOP-MJR06SE;Initial Catalog=TestDB;Integrated Security=True");
 
         public string Insert(InsertUser user)
         {
+           
             string msg;
             con.Open();
-            SqlCommand cmd = new SqlCommand("insert into UserTab (Name, Email) values(@Name, @Email)", con);
+            SqlCommand cmd = new SqlCommand("Insert into UserTab (Name, Email) values(@Name, @Email)", con);
             cmd.Parameters.AddWithValue("@Name", user.Name);
             cmd.Parameters.AddWithValue("@Email", user.Email);
             int g = cmd.ExecuteNonQuery();
@@ -45,9 +46,9 @@ namespace AppWcfService
         {
             gettestdata g = new gettestdata();
             con.Open();
-            SqlCommand cmd = new SqlCommand("select * from UserTab",con);
+            SqlCommand cmd = new SqlCommand("Select * from UserTab", con);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("Usertab");
             da.Fill(dt);
             g.usertab = dt;
             return g;
@@ -79,7 +80,7 @@ namespace AppWcfService
             string msg = "";
             SqlConnection con = new SqlConnection();
             con.Open();
-            SqlCommand cmd = new SqlCommand("delete UserTab where UserID = @UserID", con);
+            SqlCommand cmd = new SqlCommand("Delete UserTab where UserID = @UserID", con);
             cmd.Parameters.AddWithValue("@UserID", d.UID);
             int res = cmd.ExecuteNonQuery();
             if (res==1)
